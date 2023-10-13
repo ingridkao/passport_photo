@@ -1,50 +1,76 @@
 <script setup lang="ts">
-import { format, PhotoGap } from '../assets/format'
-import { ref, reactive, computed  } from 'vue'
+import { format, aspectRatio, printW, type FormatItemTypes } from '../assets/format'
+import { ref, reactive, watch  } from 'vue'
 const props = defineProps<{
     targetKey: string
 }>()
 
-const aspectRatio = 1.5
-const windowPadding = 64
-const scrollbar = 18
-const width = window.innerWidth - windowPadding - scrollbar;
-const targetFormat = computed(() => props.targetKey? format[props.targetKey]: {})
+// // 螢幕寬度的內距
+// const windowPadding = 64
+// // 預留給瀏覽器的scrollbar寬度
+// const scrollbar = 18
+// const width = window.innerWidth - windowPadding - scrollbar
+const width = 320
+const height = Math.round(width/aspectRatio)
 
-const photoPadding = PhotoGap
 const configKonva = reactive ({
     width: width,
-    height: width/aspectRatio,
+    height: height,
 });
 const configBgRect = reactive ({
     x: 0,
     y: 0,
     width: width,
-    height: width/aspectRatio,
-    stroke: "#ddd",
+    height: height,
+    stroke: "#999",
     strokeWidth: 1
 });
+
+// 螢幕上尺寸和實際列印比率
+const translateRatio = Math.round(width/printW)
 const configRect = reactive ({
     // x: 0,
     // y: 0,
-    width: 280/2,
-    height: 350/2,
+    width: 28*translateRatio,
+    height: 35*translateRatio,
     stroke: "#ddd",
     strokeWidth: 1
 });
+const printLayout = reactive ({
+    row: 2,
+    col: 4,
+    gap: 15
+})
+const targetFormat = ref()
+const updateRect = () => {
+    const {w, h, row, col, gap} = targetFormat.value as FormatItemTypes
+    configRect.width = w*translateRatio || 0
+    configRect.height = h*translateRatio || 0
+    printLayout.row = row || 1
+    printLayout.col = col || 1
+    printLayout.gap = gap || 10
+}
+watch(
+    () => props.targetKey,
+    (targetKey) => {
+        if(targetKey) {
+            targetFormat.value = format[targetKey]? format[targetKey]: {}
+            updateRect()
+        }
+    },{ immediate: true }
+)
 
 const stageRef = ref()
 const downloadURI = () => {
-    const dataURL = stageRef.value.getStage().toDataURL();
+    const dataURL = stageRef.value.getStage().toDataURL()
 
-    const link = document.createElement('a');
-    link.download = 'stage.png';
-    link.href = dataURL;
-    document.body.appendChild(link);
+    const link = document.createElement('a')
+    link.download = 'stage.png'
+    link.href = dataURL
+    document.body.appendChild(link)
     link.click();
-    document.body.removeChild(link);
+    document.body.removeChild(link)
 }
-
 
 </script>
 
@@ -53,21 +79,20 @@ const downloadURI = () => {
         <h2>
             預覽
         </h2>
-        <div v-if="targetFormat">
-            {{ targetFormat.w }}
-            {{ targetFormat.h }}
-        </div>
         <v-stage ref="stageRef" :config="configKonva">
             <v-layer>
                 <v-rect :config="configBgRect" />
-                <v-rect 
-                    v-for="item in 4"
-                    :key="item"
-                    :config="{...configRect, x: ((item-1)*(280/2 + photoPadding) + photoPadding), y: photoPadding}" />
-                <v-rect 
-                    v-for="item in 4"
-                    :key="item"
-                    :config="{...configRect, x: ((item-1)*(280/2 + photoPadding) + photoPadding), y: ((2-1)*(350/2 + 20) + photoPadding) }" />
+                <template v-for="rows in printLayout.row" :key="rows">
+                    <v-rect 
+                        v-for="cols in printLayout.col"
+                        :key="cols"
+                        :config="{
+                            ...configRect, 
+                            x: ((cols-1)*(configRect.width + printLayout.gap) + printLayout.gap), 
+                            y: ((rows-1)*(configRect.height + printLayout.gap) + printLayout.gap)
+                        }"
+                    />
+                </template>
             </v-layer>
         </v-stage>
         <button @click="downloadURI">
