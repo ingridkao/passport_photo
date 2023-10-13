@@ -10,9 +10,9 @@ defineEmits(["update"])
         </h2>
         <div>
             <button 
-                v-for="item in format" 
-                :key="item.key"
-                @click="$emit('update', item)"
+                v-for="(item, key) in format" 
+                :key="key"
+                @click="$emit('update', key)"
             >
                 <h5>{{ item.name }}</h5>
                 <h6>({{ item.w }} X {{ item.h }} cm)</h6>

@@ -1,8 +1,27 @@
 # passport_photo
 
-This template should help get you started developing with Vue 3 in Vite.
+使用vue3、konva證件照DIY
 
-[參考](https://diyidphoto.com/takePhoto/uploadPhoto)
+
+
+## 專案介紹
+
+實作一個證件照DIY的編輯器，預計會有以下流程：
+
+1. 列印格式選擇                                  - \src\components\SizeSelect.vue
+2. 拍照/上傳照片                                 - \src\components\UploadFile.vue
+3. 可以讓使用者裁切旋轉圖片      
+4. 依照選取格式另存成4X6大小
+5. 下載
+
+> 下載下來的檔案可以上傳到ibon列印網，透過列印4X6明信片功能做出證件照
+> 之後想要研究`偵測是否符合格式、去背、位移照片`
+
+
+
+## 參考專案
+
+參考[證件快照](https://diyidphoto.com/takePhoto/uploadPhoto)
 用vue製作前端，有趣的是每次上傳圖片會建立一個websocket通道，去判斷以下：
 1. 圖片參數
 2. 檢查口罩
@@ -19,13 +38,16 @@ This template should help get you started developing with Vue 3 in Vite.
 
 [在vue項目中安裝opencv.js](https://www.5axxw.com/questions/simple/ibrnlv)
 
-## 流程
 
-1. 列印格式選擇  - \src\components\SizeSelect.vue
-2. 拍照/上傳照片 - \src\components\UploadFile.vue
-3. 裁切旋轉圖片      
-4. 偵測去背(todo)
-5. 另存成4X6大小
+
+## 安裝依賴
+
+1. konva: HTML5 Canvas JavaScript框架
+ ```
+    npm install vue-konva konva --save
+
+ ```
+
 
 
 ## Customize configuration

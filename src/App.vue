@@ -4,12 +4,11 @@ import SizeSelect from './components/SizeSelect.vue';
 import UploadFile from './components/UploadFile.vue';
 import SaveAs from './components/SaveAs.vue';
 // import TheWelcome from './components/TheWelcome.vue';
-// import { format } from './assets/format';
 
 import { ref } from 'vue';
-const targetSize = ref({});
-const updateSize = (target:{}) => {
-    targetSize.value = target
+const targetKey = ref('');
+const updateSize = (key:string) => {
+    targetKey.value = key
 }
 const submitFile = () => {
     // const formData = new FormData();
@@ -34,7 +33,7 @@ const submitFile = () => {
 
         <UploadFile  />
 
-        <SaveAs :targetSize="targetSize"/>
+        <SaveAs :targetKey="targetKey"/>
     </main>
 
 </template>
