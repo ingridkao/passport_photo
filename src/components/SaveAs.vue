@@ -6,13 +6,13 @@ const props = defineProps<{
     photoFile: string,
 }>()
 
-// // 螢幕寬度的內距
+// 螢幕寬度的內距
 // const windowPadding = 64
-// // 預留給瀏覽器的scrollbar寬度
+// 預留給瀏覽器的scrollbar寬度
 // const scrollbar = 18
 // const width = window.innerWidth - windowPadding - scrollbar
-const width = 320
-const height = Math.round(width/aspectRatio)
+const width:number = 320
+const height:number = Math.round(width/aspectRatio)
 
 const configKonva = reactive ({
     width: width,
@@ -23,8 +23,7 @@ const configBgRect = reactive ({
     y: 0,
     width: width,
     height: height,
-    stroke: "#999",
-    strokeWidth: 1
+    fill: "#ddd"
 });
 
 const imageObj = new Image()
@@ -60,8 +59,12 @@ const updateRect = () => {
 const updateImage = () => {
     // ToDo 裁切圖片
     const images = new Image()
-    images.src = props.photoFile
-    images.onload = (e) => {
+    images.src = props.photoFile    
+    images.onload = (e:any) => {
+        if(e && e.target){
+            console.log(e.target.width);
+            console.log(e.target.height);
+        }
         configRect.image = images
     }
 }
@@ -117,7 +120,6 @@ const downloadURI = () => {
         <button @click="downloadURI">
             另存
         </button>
-        {{ imageObj.src }}
     </section>
 </template>
 

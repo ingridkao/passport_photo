@@ -2,6 +2,7 @@
 import HelloWorld from './components/HelloWorld.vue'
 import SizeSelect from './components/SizeSelect.vue'
 import UploadFile from './components/UploadFile.vue'
+import CropFile from './components/CropFile.vue'
 import SaveAs from './components/SaveAs.vue'
 
 import { ref } from 'vue'
@@ -34,7 +35,10 @@ const submitFile = () => {
         <SizeSelect @update="updateSize" />
 
         <UploadFile @upload="updateImage" />
-        <SaveAs :targetKey="targetKey" :photoFile="photeFile"/>
+
+        <CropFile :targetKey="targetKey" :photoFile="photeFile"/>
+
+        <!-- <SaveAs :targetKey="targetKey" :photoFile="photeFile"/> -->
     </main>
 
 </template>

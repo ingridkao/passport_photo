@@ -3,7 +3,8 @@
 // 實際ibon紙材
 // 量測為14.8X10 長寬比1.48
 // export const aspectRatio = 1.5
-export const aspectRatio:nunber = 1.48
+export const aspectRatio:number = 1.48
+
 export const printW = 140
 
 export type FormatItemTypes = {
