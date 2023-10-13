@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-import SizeSelect from './components/SizeSelect.vue';
-import UploadFile from './components/UploadFile.vue';
-import SaveAs from './components/SaveAs.vue';
-// import TheWelcome from './components/TheWelcome.vue';
+import HelloWorld from './components/HelloWorld.vue'
+import SizeSelect from './components/SizeSelect.vue'
+import UploadFile from './components/UploadFile.vue'
+import SaveAs from './components/SaveAs.vue'
 
-import { ref } from 'vue';
-const targetKey = ref('');
+import { ref } from 'vue'
+const targetKey = ref('')
+const photeFile = ref('')
 const updateSize = (key:string) => {
     targetKey.value = key
+}
+const updateImage = (file:string) => {
+    photeFile.value = file
 }
 const submitFile = () => {
     // const formData = new FormData();
@@ -27,13 +30,11 @@ const submitFile = () => {
     </header> -->
     <main class="wrapper">
         <HelloWorld msg="DIY證件照" />
-        <!-- <TheWelcome /> -->
 
         <SizeSelect @update="updateSize" />
 
-        <UploadFile  />
-
-        <SaveAs :targetKey="targetKey"/>
+        <UploadFile @upload="updateImage" />
+        <SaveAs :targetKey="targetKey" :photoFile="photeFile"/>
     </main>
 
 </template>

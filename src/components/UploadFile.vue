@@ -2,21 +2,34 @@
 import { ref } from 'vue'
 window.URL = window.URL || window.webkitURL
 
-const fileEl = ref();
-const img = ref<File>();
-const previewMap = ref();
+const emit = defineEmits(["upload"])
+const fileEl = ref()
+const img = ref<File>()
+const previewMap = ref()
 
 const uploadFileHandle = (event:any) => {
     const imgFile = event.target.files[0]
-    // console.log(imgFile);
     img.value = imgFile
     // 讀取 image 資料
     previewMap.value = window.URL.createObjectURL(imgFile)
+    getBase64(imgFile)
+
+    event.target.value = null    
+}
+
+const getBase64 = (file:any) =>{
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+        emit('upload', reader.result)
+    }
+    reader.onerror = (error) => {
+        console.log('Error: ', error);
+    }
 }
 const uploadFile = () => {
     fileEl.value.click()
 }
-
 
 </script>
 
@@ -50,7 +63,9 @@ const uploadFile = () => {
 </template>
 
 <style scoped>
-.img_box,
+.img_box{
+    width: 160px;
+}
 .img_box img{
     width: 100%;
 }
